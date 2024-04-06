@@ -133,8 +133,8 @@ export HOME_BIN PAGER
 #export LC_ALL=C
 export LC_ALL=en_IL.UTF-8
 #export PYTHONPATH=${PYTHONPATH}:${HOME}/python:~/work/vault/code/vault_py:~/work/vault/code/vault_py/apis:~/work/vault/code/
-alias ls="eza --icons --group-directories-first --color-scale -a"
-alias ll="eza --icons --group-directories-first --color-scale -la"
+alias ls="eza --icons -a"
+alias ll="eza --icons -la"
 
 
 #control the terminal:
