@@ -104,17 +104,6 @@ vim.api.nvim_set_hl(0, 'Folded', {
   ctermbg = 'DarkGrey',
 })
 
---add a ; at the end of the line
--- vim.cmd([[
--- function! ToggleEndChar(charToMatch)
--- 	let l:winview = winsaveview()
--- 	s/\v(.)$/\=submatch(1)==a:charToMatch ? '' : submatch(1).a:charToMatch
--- 	nohlsearch
--- 	call winrestview(l:winview)
--- endfunction
--- ]])
--- vim.keymap.set('n', '<Leader>;', ":call ToggleEndChar(';')<CR>", {})
-
 vim.cmd([[
 augroup replacegJ
 	fun! JoinSpaceless()
@@ -147,9 +136,6 @@ end, {})
 -- highlight whitespace
 vim.g.better_whitespace_ctermcolor = 'red'
 vim.g.better_whitespace_guicolor = 'red'
-
--- doge
-vim.g.doge_comment_jump_modes = { 'n', 's' }
 
 --iron
 vim.g.iron_map_defaults = 0
