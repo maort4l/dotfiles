@@ -1,13 +1,13 @@
 return {
   {
-    "folke/flash.nvim",
-    event = "VeryLazy",
+    'folke/flash.nvim',
+    event = 'VeryLazy',
     opts = {
-      modes ={
+      modes = {
         search = {
-          enabled = false
-        }
-      }
+          enabled = false,
+        },
+      },
     },
     -- stylua: ignore
     keys = {
@@ -92,7 +92,7 @@ return {
     'tpope/vim-repeat',
     event = 'VeryLazy',
   },
-  { 'vim-scripts/dbext.vim',   ft = 'sql', enabled = false },
+  { 'vim-scripts/dbext.vim', ft = 'sql', enabled = false },
   {
     'wellle/targets.vim',
     event = 'VeryLazy',
@@ -103,7 +103,7 @@ return {
   },
   -- { "vim-scripts/TextTransform" },
 
-  { 'godlygeek/tabular',  cmd = 'Tabularize' },
+  { 'godlygeek/tabular', cmd = 'Tabularize' },
 
   -- add cmd utils as vim commands
   {
@@ -122,7 +122,7 @@ return {
       'Llocate',
       'SudoEdit',
       'SudoWrite',
-    }
+    },
   },
 
   -- show mappings
@@ -139,7 +139,7 @@ return {
     'tommcdo/vim-lion',
     keys = {
       { 'gl', nil, desc = 'align right on character', mode = { 'n', 'v' } },
-      { 'gL', nil, desc = 'align left on character',  mode = { 'n', 'v' } },
+      { 'gL', nil, desc = 'align left on character', mode = { 'n', 'v' } },
     },
   },
 
@@ -179,14 +179,6 @@ return {
     'Julian/vim-textobj-variable-segment',
     dependencies = { 'kana/vim-textobj-user' },
     event = 'VeryLazy',
-  },
-
-  -- trouble
-  {
-    'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {},
-    cmd = { 'TroubleToggle' },
   },
   {
     'smjonas/inc-rename.nvim',
@@ -230,14 +222,6 @@ return {
   -- },
 
   -- debug prints
-  {
-    'andrewferrier/debugprint.nvim',
-    config = function()
-      require('debugprint').setup({
-        create_keymaps = false,
-      })
-    end,
-  },
 
   -- live command preview
   {
@@ -274,8 +258,8 @@ return {
     keys = {
       { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = 'n' },
       { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
-      { '+',     '<Plug>(dial-increment)', noremap = true, mode = 'n' },
-      { '-',     '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
+      { '+', '<Plug>(dial-increment)', noremap = true, mode = 'n' },
+      { '-', '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
       { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = 'v' },
       { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = 'v' },
       -- these are buggy for now!

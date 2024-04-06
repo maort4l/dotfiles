@@ -1,23 +1,5 @@
 local vim = vim
 
---Trouble
-vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>')
-vim.keymap.set('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>')
-vim.keymap.set('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>')
-vim.keymap.set('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>')
-vim.keymap.set('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>')
-
--- Debug prints
-vim.keymap.set("n", "<Leader>d", function() return require('debugprint').debugprint() end,
-  { expr = true, desc = "Debug line below" })
-vim.keymap.set("n", "<Leader>D", function() return require('debugprint').debugprint({ above = true }) end,
-  { expr = true, desc = 'Debug line above' })
-vim.keymap.set('n', '<leader>v', function() return require("debugprint").debugprint({ variable = true }) end,
-  { expr = true, desc = 'Variable debug line below' })
-vim.keymap.set('n', '<leader>V',
-  function() return require("debugprint").debugprint({ above = true, variable = true }) end,
-  { expr = true, desc = 'Variable debug line above' })
-
 -- Remove silent from ; : mapping, so that : shows up in command mode
 vim.keymap.set({ 'n', 'v' }, ';', ':', { silent = false })
 vim.keymap.set({ 'n', 'v' }, ':', ';', { silent = false })
