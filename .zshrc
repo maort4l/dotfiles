@@ -134,7 +134,7 @@ export HOME_BIN PAGER
 export LC_ALL=en_IL.UTF-8
 #export PYTHONPATH=${PYTHONPATH}:${HOME}/python:~/work/vault/code/vault_py:~/work/vault/code/vault_py/apis:~/work/vault/code/
 alias ls="eza --icons --group-directories-first -a"
-alias ll="eza --icons --group-directories-first -la"
+alias ll="eza --icons --group-directories-first -la -snew"
 
 
 #control the terminal:

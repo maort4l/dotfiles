@@ -7,6 +7,9 @@ return {
     config = function()
       -- load	lualine
       require('lualine').setup({
+        extensions = {
+          'trouble', 'mason', 'fugitive', 'lazy'
+        },
         options = {
           theme = 'tokyonight',
           globalstatus = true,
