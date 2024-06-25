@@ -1,13 +1,32 @@
 return {
   {
-    'folke/flash.nvim',
-    event = 'VeryLazy',
+    "echasnovski/mini.hipatterns",
+    -- event = "BufReadPre",
+    config = function()
+      require("mini.hipatterns").setup({
+        highlighters = {
+          -- Hex colours
+          hex_colour = require("mini.hipatterns").gen_highlighter.hex_color(),
+        }
+      })
+    end,
+  },
+  {
+    'LunarVim/bigfile.nvim',
+    opts = {
+      filesize = 2,
+      pattern = { '*' },
+    },
+  },
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
     opts = {
       modes = {
         search = {
-          enabled = false,
-        },
-      },
+          enabled = false
+        }
+      }
     },
     -- stylua: ignore
     keys = {
@@ -30,16 +49,6 @@ return {
       vim.cmd('colorscheme tokyonight')
     end,
   },
-  -- {
-  --   'xiantang/darcula-dark.nvim',
-  --   enabled = false,
-  --   dependencies = {
-  --     'nvim-treesitter/nvim-treesitter',
-  --   },
-  --   config = function()
-  --     vim.cmd('colorscheme darcula-dark')
-  --   end,
-  -- },
   --
   -- {
   --   'rebelot/kanagawa.nvim',
@@ -92,7 +101,7 @@ return {
     'tpope/vim-repeat',
     event = 'VeryLazy',
   },
-  { 'vim-scripts/dbext.vim', ft = 'sql', enabled = false },
+  { 'vim-scripts/dbext.vim', ft = 'sql',        enabled = false },
   {
     'wellle/targets.vim',
     event = 'VeryLazy',
@@ -103,7 +112,7 @@ return {
   },
   -- { "vim-scripts/TextTransform" },
 
-  { 'godlygeek/tabular', cmd = 'Tabularize' },
+  { 'godlygeek/tabular',     cmd = 'Tabularize' },
 
   -- add cmd utils as vim commands
   {
@@ -122,7 +131,7 @@ return {
       'Llocate',
       'SudoEdit',
       'SudoWrite',
-    },
+    }
   },
 
   -- show mappings
@@ -139,7 +148,7 @@ return {
     'tommcdo/vim-lion',
     keys = {
       { 'gl', nil, desc = 'align right on character', mode = { 'n', 'v' } },
-      { 'gL', nil, desc = 'align left on character', mode = { 'n', 'v' } },
+      { 'gL', nil, desc = 'align left on character',  mode = { 'n', 'v' } },
     },
   },
 
@@ -180,6 +189,14 @@ return {
     dependencies = { 'kana/vim-textobj-user' },
     event = 'VeryLazy',
   },
+
+  -- trouble
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
+    cmd = { 'Trouble' },
+  },
   {
     'smjonas/inc-rename.nvim',
     cmd = 'IncRename',
@@ -197,32 +214,6 @@ return {
       require('inc_rename').setup()
     end,
   },
-
-  -- swap ts nodes
-  -- {
-  --   'mizlan/iswap.nvim',
-  --   config = function()
-  --     require('iswap').setup()
-  --   end,
-  --   keys = {
-  --     -- swap ts node under cursor
-  --     {
-  --       '<leader>gs',
-  --       function()
-  --         require('iswap').iswap_node_with('right')
-  --       end,
-  --     },
-  --     {
-  --       '<leader>gS',
-  --       function()
-  --         require('iswap').iswap_node_with('left')
-  --       end,
-  --     },
-  --   },
-  -- },
-
-  -- debug prints
-
   -- live command preview
   {
     'smjonas/live-command.nvim',
@@ -258,8 +249,8 @@ return {
     keys = {
       { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = 'n' },
       { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
-      { '+', '<Plug>(dial-increment)', noremap = true, mode = 'n' },
-      { '-', '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
+      { '+',     '<Plug>(dial-increment)', noremap = true, mode = 'n' },
+      { '-',     '<Plug>(dial-decrement)', noremap = true, mode = 'n' },
       { '<C-a>', '<Plug>(dial-increment)', noremap = true, mode = 'v' },
       { '<C-x>', '<Plug>(dial-decrement)', noremap = true, mode = 'v' },
       -- these are buggy for now!
@@ -282,10 +273,6 @@ return {
       },
     },
   },
-
-  -- sqlite lua
-  -- { 'kkharji/sqlite.lua', lazy = true },
-
   {
     'windwp/nvim-autopairs',
     config = function()

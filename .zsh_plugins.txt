@@ -1,0 +1,38 @@
+#!/bin/zsh
+# .zsh_plugins.txt - antidote plugins file
+#
+
+
+### Completions
+
+
+ohmyzsh/ohmyzsh path:plugins/sudo
+#ohmyzsh/ohmyzsh path:plugins/ssh
+sunlei/zsh-ssh path:zsh-ssh.zsh
+
+
+### THEME
+romkatv/powerlevel10k path:powerlevel10k.zsh-theme
+
+
+### Tools
+
+agkozak/zsh-z path:zsh-z.plugin.zsh
+linnnus/autovenv path:autovenv.plugin.zsh
+Aloxaf/fzf-tab path:fzf-tab.plugin.zsh
+ohmyzsh/ohmyzsh path:plugins/ssh-agent
+
+
+
+
+### Lazy Load
+
+zdharma-continuum/fast-syntax-highlighting kind:defer
+hlissner/zsh-autopair kind:defer
+
+
+### Final Plugins
+#
+
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search

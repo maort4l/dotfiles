@@ -3,45 +3,39 @@ local function setup()
   local cmp = require('cmp')
   local compare = require('cmp.config.compare')
   local types = require('cmp.types')
-  local tabnine = require('cmp_tabnine.config')
-  -- require('cmp_ai.config'):setup({
-  --   -- provider = 'Bard',
-  --   -- provider = 'HF',
-  --   provider = 'OpenAI',
-  --   model = 'gpt-4',
-  -- })
+  local copilot = require('copilot_cmp').setup()
 
-  tabnine:setup({
-    max_lines = 1000,
-    max_num_results = 20,
-    sort = true,
-    priority = 5000,
-    show_prediction_strength = true,
-    run_on_every_keystroke = true,
-    -- snippet_placeholder = '';
-  })
+  -- local tabnine = require('cmp_tabnine.config')
+
+  -- tabnine:setup({
+  --   max_lines = 1000,
+  --   max_num_results = 20,
+  --   sort = true,
+  --   priority = 5000,
+  --   show_prediction_strength = true,
+  --   run_on_every_keystroke = true,
+  --   -- snippet_placeholder = '';
+  -- })
 
   local source_mapping = {
     buffer = '[Buffer]',
     nvim_lsp = '[LSP]',
     nvim_lua = '[Lua]',
-    cmp_tabnine = '[TN]',
+    -- cmp_tabnine = '[TN]',
     -- cmp_ai = '[AI]',
+    copilot = '[Copilot]',
     path = '[Path]',
     calc = '[Calc]',
     treesitter = '[TS]',
     fuzzy_buffer = '[FZ]',
-    fuzzy_path = '[FZ]',
   }
 
+
   local comparators = {
-    require('cmp_tabnine.compare'),
-    -- require('cmp_ai.compare'),
-    -- require('cmp_fuzzy_path.compare'),
-    -- require('cmp_fuzzy_buffer.compare'),
+    require('copilot_cmp.comparators').prioritize,
+    require('cmp_fuzzy_buffer.compare'),
     compare.offset,
     compare.exact,
-    -- compare.scopes,
     compare.score,
     compare.recently_used,
     compare.locality,
@@ -54,7 +48,6 @@ local function setup()
   cmp.setup({
     snippet = {
       expand = function(args)
-        -- vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
         vim.snippet.expand(args.body)
       end,
     },
@@ -77,20 +70,9 @@ local function setup()
     -- You must set mapping.
     mapping = {
       ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }), { 'i', 'c' }),
-      -- ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }), { 'i', 'c' }),
       ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
       ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
       ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      -- ['<C-x>'] = cmp.mapping(
-      --   cmp.mapping.complete({
-      --     config = {
-      --       sources = cmp.config.sources({
-      --         { name = 'cmp_ai' },
-      --       }),
-      --     },
-      --   }),
-      --   { 'i' }
-      -- ),
       ['<C-e>'] = cmp.mapping(cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
         { 'i', 'c' }),
       ['<CR>'] = cmp.mapping(function(fallback)
@@ -105,7 +87,7 @@ local function setup()
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-        elseif vim.snippet.jumpable(1) then
+        elseif vim.snippet.active({direction = 1}) then
           vim.snippet.jump(1)
         else
           fallback()
@@ -114,7 +96,7 @@ local function setup()
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-        elseif vim.snippet.jumpable(-1) then
+        elseif vim.snippet.active({direction = -1}) then
           vim.snippet.jump(-1)
         else
           fallback()
@@ -122,10 +104,15 @@ local function setup()
       end, { 'i', 'c' }),
     },
     formatting = {
+      -- format = lspkind.cmp_format({
+      --   mode = "symbol",
+      --   max_width = 80,
+      --   symbol_map = { copilot = "" }
+      -- }),
       format = function(entry, vim_item)
         vim_item.kind = lspkind.symbolic(vim_item.kind, { mode = 'symbol' })
         vim_item.menu = source_mapping[entry.source.name]
-        if entry.source.name == 'cmp_tabnine' then
+        if entry.source.name == 'copilot' then
           local detail = (entry.completion_item.labelDetails or {}).detail
           vim_item.kind = ''
           if detail and detail:find('.*%%.*') then
@@ -169,20 +156,16 @@ local function setup()
           end,
         },
       },
-      {
-        name = 'cmp_tabnine',
-        keyword_length = 0,
-      },
-      -- { name = 'vsnip' },
+      {name = 'copilot' },
       { name = 'nvim_lsp' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
-      -- { name = 'treesitter' },
+      { name = 'treesitter' },
       -- { name = 'buffer' },
-      -- { name = 'path' },
+      { name = 'path' },
       { name = 'emoji' },
       { name = 'calc' },
-      { name = 'fuzzy_path' },
+      -- { name = 'fuzzy_path' },
     }),
 
     preselect = cmp.PreselectMode.None,
@@ -194,7 +177,7 @@ local function setup()
     },
 
     view = {
-      entries = { name = 'custom', selection_order = 'near_cursor' },
+      entries = { name = 'custom', selection_order = 'near_cursor', follow_cursor = true },
     },
   })
 
@@ -215,34 +198,15 @@ local function setup()
   })
 
   cmp.setup.cmdline(':', {
-    view = {
-      entries = { name = 'custom', selection_order = 'near_cursor' },
-    },
-    sources = cmp.config.sources({
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources(
       {
-        name = 'fuzzy_path',
-        option = {
-          fd_cmd = { 'fd', '-d', '20', '-p', '-i' },
-        },
+        { name = 'path' }
       },
-    }, {
-      { name = 'cmdline' },
-    }),
+      {
+        { name = 'cmdline' }
+      })
   })
-
-  -- local ns_id = vim.api.nvim_create_namespace('arrows')
-  -- local function remove_marks()
-  --     local all = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, {})
-  --     for _, mark in ipairs(all) do
-  --       vim.api.nvim_buf_del_extmark(0, ns_id, mark[1])
-  --     end
-  -- end
-  --
-  -- cmp.event:on('menu_closed',
-  --   function()
-  --     remove_marks()
-  --   end
-  -- )
 
   cmp.event:on('menu_opened', function(evt)
     if vim.api.nvim_get_mode().mode:sub(1, 1) == 'c' then
@@ -264,65 +228,24 @@ local function setup()
     vim.api.nvim_win_set_config(evt.window.entries_win.win, {
       border = border,
     })
-    -- local opts = {
-    --   id = 1,
-    --   virt_text = {{character, "IncSearch"}},
-    --   virt_text_pos = 'overlay',
-    --   priority = 10005,
-    -- }
-    --
-    -- vim.api.nvim_buf_set_extmark(0, ns_id, row, col, opts)
   end)
-
-  local au = vim.api.nvim_create_augroup('tabnine', { clear = true })
-
-  vim.api.nvim_create_autocmd('BufRead', {
-    group = au,
-    pattern = '*.py',
-    callback = function()
-      require('cmp_tabnine'):prefetch(vim.fn.expand('%:p'))
-    end,
-  })
-  --
-  -- local show, hide = vim.diagnostic.handlers.virtual_lines.show, vim.diagnostic.handlers.virtual_lines.hide
-  -- vim.diagnostic.handlers.virtual_lines = {
-  --   show = function(...)
-  --       show(...)
-  --       if cmp.visible() then
-  --         cmp.core.view:_get_entries_view():open(
-  --           cmp.core.view:_get_entries_view().offset,
-  --           cmp.core.view:_get_entries_view().entries
-  --       )
-  --       end
-  --   end,
-  --   hide = function(...)
-  --       hide(...)
-  --       if cmp.visible() then
-  --         cmp.core.view:_get_entries_view():open(
-  --           cmp.core.view:_get_entries_view().offset,
-  --           cmp.core.view:_get_entries_view().entries
-  --       )
-  --       end
-  --   end
-  -- }
-
-  -- local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-  -- cmp.event:on(
-  --   'confirm_done',
-  --   cmp_autopairs.on_confirm_done()
-  -- )
+  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+  cmp.event:on(
+    'confirm_done',
+    cmp_autopairs.on_confirm_done()
+  )
 end
 
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
 return {
   {
+
     'hrsh7th/nvim-cmp',
+    event = { "InsertEnter", "CmdlineEnter" },
     config = setup,
     lazy = false,
     dependencies = {
-      -- {
-      --   'tzachar/cmp-ai',
-      --   dependencies = 'nvim-lua/plenary.nvim',
-      -- },
       {
         'hrsh7th/cmp-nvim-lsp',
         dependencies = 'onsails/lspkind-nvim',
@@ -334,15 +257,11 @@ return {
       { 'hrsh7th/cmp-nvim-lua' },
       { 'hrsh7th/cmp-cmdline' },
       {
-        'tzachar/cmp-tabnine',
-        build = './install.sh',
+        'zbirenbaum/copilot-cmp',
+        dependencies = 'zbirenbaum/copilot.lua',
       },
-      -- { 'hrsh7th/cmp-vsnip' },
-      -- { 'hrsh7th/vim-vsnip' },
-      -- { 'hrsh7th/vim-vsnip-integ' },
       { 'hrsh7th/cmp-nvim-lsp-signature-help' },
       { 'ray-x/cmp-treesitter' },
-
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -353,10 +272,6 @@ return {
       },
       {
         'tzachar/cmp-fuzzy-buffer',
-        dependencies = 'tzachar/fuzzy.nvim',
-      },
-      {
-        'tzachar/cmp-fuzzy-path',
         dependencies = 'tzachar/fuzzy.nvim',
       },
     },
