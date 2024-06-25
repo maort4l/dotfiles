@@ -21,7 +21,13 @@ function M.setup_codelens_refresh(client, bufnr)
   vim.api.nvim_create_autocmd(cl_events, {
     group = group,
     buffer = bufnr,
-    callback = vim.lsp.codelens.refresh,
+    callback = function(...)
+      local ok2 = pcall(vim.lsp.codelens.refresh, {bufnr = bufnr})
+      if not ok2 then
+        vim.notify('Error calling codelense refresh', vim.log.levels.ERROR)
+        return true -- remove this autocommand
+      end
+    end
   })
 end
 
@@ -42,8 +48,8 @@ function M.on_attach(client, bufnr)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
   buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', 'dp', '<cmd>lua vim.diagnostic.goto_prev({float = false})<CR>', opts)
-  buf_set_keymap('n', 'dn', '<cmd>lua vim.diagnostic.goto_next({float = false})<CR>', opts)
+  buf_set_keymap('n', 'dp', '<cmd>lua vim.diagnostic.goto_prev({float = false, severity = { min = vim.diagnostic.severity.HINT }})<CR>', opts)
+  buf_set_keymap('n', 'dn', '<cmd>lua vim.diagnostic.goto_next({float = false, severity = { min = vim.diagnostic.severity.HINT }})<CR>', opts)
   buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
   vim.keymap.set({ 'n', 'v' }, '<leader>ca', function()
@@ -72,8 +78,8 @@ function M.on_attach(client, bufnr)
   if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
     vim.b.semantic_tokens = true
   end
-  if client.server_capabilities.inlayHintProvider then
-    vim.lsp.inlay_hint.enable(bufnr, true)
+  if client.supports_method('textDocument/inlayHintProvider') then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
   --   vim.lsp.buf.inlay_hint(bufnr, true)
   -- setup codelens

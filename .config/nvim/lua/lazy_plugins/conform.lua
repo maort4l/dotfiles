@@ -25,6 +25,11 @@ return {
     },
   },
   opts = {
+    formatters = {
+      ruff = {
+        prepend_args = { '--line-length', 320 },
+      }
+    },
     formatters_by_ft = {
       json = { 'fixjson' },
       python = { 'ruff_format', 'ruff_fix' },

@@ -19,7 +19,20 @@ vim.opt.swapfile = false
 
 vim.g.kommentary_create_default_mappings = 0
 
-vim.opt.compatible = false             -- Use Vim defaults (much better!)
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldcolumn = '1'
+
+vim.opt.fillchars = {
+  fold = " ",
+  foldopen = "",
+  foldclose = "",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+vim.opt.foldminlines = 10
+
 vim.opt.showcmd = true                 -- Show (partial) command in status line.
 vim.opt.mouse = ''
 vim.opt.showmatch = true               -- Show matching brackets.
@@ -104,6 +117,17 @@ vim.api.nvim_set_hl(0, 'Folded', {
   ctermbg = 'DarkGrey',
 })
 
+--add a ; at the end of the line
+-- vim.cmd([[
+-- function! ToggleEndChar(charToMatch)
+-- 	let l:winview = winsaveview()
+-- 	s/\v(.)$/\=submatch(1)==a:charToMatch ? '' : submatch(1).a:charToMatch
+-- 	nohlsearch
+-- 	call winrestview(l:winview)
+-- endfunction
+-- ]])
+-- vim.keymap.set('n', '<Leader>;', ":call ToggleEndChar(';')<CR>", {})
+
 vim.cmd([[
 augroup replacegJ
 	fun! JoinSpaceless()
@@ -136,6 +160,9 @@ end, {})
 -- highlight whitespace
 vim.g.better_whitespace_ctermcolor = 'red'
 vim.g.better_whitespace_guicolor = 'red'
+
+-- doge
+vim.g.doge_comment_jump_modes = { 'n', 's' }
 
 --iron
 vim.g.iron_map_defaults = 0

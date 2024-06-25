@@ -6,7 +6,7 @@ return {
     { '<leader>pp', '<cmd>FzfLua files<cr>',                    desc = 'Find files' },
     { '<leader>fg', '<cmd>FzfLua live_grep_glob<cr>',           desc = 'Grep' },
     { '<leader>fh', '<cmd>FzfLua help_tags<cr>',                desc = 'Help' },
-    { '<leader>gs', '<cmd>FzfLua git_status<cr>',               desc = 'Git Status' },
+    -- { '<leader>gs', '<cmd>FzfLua git_status<cr>',               desc = 'Git Status' },
   },
   config = function()
     local actions = require "fzf-lua.actions"
@@ -35,7 +35,7 @@ return {
         },
         cwd_prompt = false,
         prompt = "Files> ",
-        fd_opts = "--type file --color=always --exclude .git",
+        fd_opts = "--type file --exclude .git",
         fzf_opts = {
           ["--layout"] = "reverse",
           ["--scheme"] = "path",
