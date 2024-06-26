@@ -3,14 +3,14 @@ return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
       'tzachar/local-highlight.nvim',
+       'AndreM222/copilot-lualine',
     },
     config = function()
       -- load	lualine
       require('lualine').setup({
-        extensions = {
-          'trouble', 'mason', 'fugitive', 'lazy'
-        },
+        extensions = {'trouble', 'fugitive', 'lazy','mason'},
         options = {
+          icons_enabled = true,
           theme = 'tokyonight',
           globalstatus = true,
           component_separators = '|',
@@ -19,6 +19,13 @@ return {
         sections = {
           lualine_a = {
             { 'mode', separator = { left = '' }, right_padding = 2 },
+          },
+
+          lualine_x = {
+            { 'copilot', show_colors = true },
+            'encoding',
+            'fileformat',
+            'filetype',
           },
           lualine_y = {
             'progress',

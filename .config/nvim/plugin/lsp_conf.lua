@@ -14,13 +14,15 @@ local function setup_servers()
   table.insert(path, 'lua/?.lua')
   table.insert(path, 'lua/?/init.lua')
 
+
   local function add(lib)
     for _, p in pairs(vim.fn.expand(lib, false, true)) do
-     if vim.uv ~= nil and vim.uv.fs_realpath ~= nil then
+      if vim.uv ~= nil and vim.uv.fs_realpath ~= nil then
         p = vim.uv.fs_realpath(p)
       else
         p = vim.loop.fs_realpath(p)
       end
+      library[p] = true
     end
   end
 
@@ -35,7 +37,7 @@ local function setup_servers()
   add('~/.local/share/nvim/lazy/*')
 
   local configs = {}
-  configs['cssls'] = {}
+  -- configs['cssls'] = {}
   configs['vimls'] = {}
   configs['yamlls'] = {
     settings = {
@@ -77,74 +79,103 @@ local function setup_servers()
   --     },
   --   },
   -- }
-  configs['pylsp'] = {
-    root_dir = function(filename, bufnr)
-      local util = require('lspconfig.util')
-      local root = util.root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile')(filename)
-      if root then
-        return root
-      end
-      root = util.find_git_ancestor(filename)
-      if root then
-        return root
-      end
-      return vim.fs.dirname(filename)
-    end,
+  configs['basedpyright'] = {
     settings = {
-      pylsp = {
-        configurationSources = { 'flake8' },
-        plugins = {
-          -- make sure to install with PylspInstall python-lsp-ruff
-          ruff = {
-            enabled = true,
-            extendSelect = { 'I' },
-            ignore = {},
-            lineLength = 160,
-            format = { "I" },
-          },
-          jedi_completion = {
-            enabled = true,
-            fuzzy = true,
-          },
-          jedi_hover = { enabled = true },
-          jedi_references = { enabled = true },
-          jedi_signature_help = { enabled = true },
-          jedi_symbols = { enabled = true, all_scopes = true },
-          pycodestyle = { enabled = false },
-          autopep8 = { enabled = false },
-          flake8 = {
-            enabled = false,
-            ignore = {},
-            maxLineLength = 160,
-          },
-          mypy = { enabled = false },
-          pyflakes = { enabled = false },
-          isort = { enabled = false },
-          yapf = { enabled = false },
-          pylint = { enabled = false },
-          pydocstyle = { enabled = false },
-          mccabe = {
-            enabled = false,
-            threshold = 25,
-          },
-          preload = { enabled = false },
-          rope_completion = { enabled = false },
-          rope_autoimport = {
-            enabled = true,
-
-            code_actions = { enabled = true },
-            completions = { enabled = true }
+      basedpyright = {
+        analysis = {
+          typeCheckingMode = 'off',
+          diagnosticSeverityOverrides = {
+            strictDictionaryInference     = 'warning',
+            reportMissingImports          = 'error',
+            reportUndefinedVariable       = 'error',
+            reportUnusedExpression        = 'warning',
+            reportCallIssue               = 'error',
+            reportIndexIssue              = 'error',
+            reportUnhashable              = 'error',
+            reportUnusedExcept            = 'error',
+            reportPossiblyUnboundVariable = 'error',
+            reportDuplicateImport         = 'error',
+            reportUnusedImport            = 'warning',
+            reportUnusedVariable          = 'warning',
           }
         }
-
       }
     }
   }
+  -- configs['pylsp'] = {
+  --   root_dir = function(filename, bufnr)
+  --     local util = require('lspconfig.util')
+  --     local root = util.root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile')(filename)
+  --     if root then
+  --       return root
+  --     end
+  --     root = util.find_git_ancestor(filename)
+  --     if root then
+  --       return root
+  --     end
+  --     return vim.fs.dirname(filename)
+  --   end,
+  --   settings = {
+  --     pylsp = {
+  --       configurationSources = { 'flake8' },
+  --       plugins = {
+  --         -- make sure to install with PylspInstall python-lsp-ruff
+  --         ruff = {
+  --           enabled = true,
+  --           extendSelect = { 'I' },
+  --           ignore = {},
+  --           lineLength = 160,
+  --           format = { "I" },
+  --         },
+  --         jedi_completion = {
+  --           enabled = true,
+  --           fuzzy = true,
+  --         },
+  --         rope_rename = {
+  --           enabled = false
+  --         },
+  --         jedi_rename = {
+  --           enabled = false,
+  --         },
+  --         pylsp_rope = {
+  --           rename = {
+  --             enabled = true
+  --           }
+  --         },
+  --
+  --         jedi_hover = { enabled = true },
+  --         jedi_references = { enabled = true },
+  --         jedi_signature_help = { enabled = true },
+  --         jedi_symbols = { enabled = true, all_scopes = true },
+  --         pycodestyle = { enabled = false },
+  --         autopep8 = { enabled = false },
+  --         flake8 = {enabled = false },
+  --         mypy = { enabled = false },
+  --         pyflakes = { enabled = false },
+  --         isort = { enabled = false },
+  --         yapf = { enabled = false },
+  --         pylint = { enabled = false },
+  --         pydocstyle = { enabled = false },
+  --         mccabe = {enabled = false, threshold = 25},
+  --         preload = { enabled = false },
+  --         rope_completion = { enabled = false },
+  --         -- rope_autoimport = {
+  --         --   enabled = true,
+  --         --
+  --         --   code_actions = { enabled = true },
+  --         --   completions = { enabled = true }
+  --         -- }
+  --       }
+  --
+  --     }
+  --   }
+  -- }
 
-  configs['sqlls'] = {
-    -- single_file_support = true,
-  }
-  configs['graphql'] = {}
+  -- configs['sqlls'] = {
+  --   -- single_file_support = true,
+  -- }
+  configs['gopls'] ={}
+  -- configs['graphql'] = {}
   configs['lua_ls'] = {
     settings = {
       Lua = {
@@ -185,20 +216,20 @@ local function setup_servers()
       },
     },
   }
-  configs['tsserver'] = {
-    settings = {
-      tsserver = {
-        -- filetypes = { "sh", "zsh" };
-      },
-    },
-  }
-  configs['html'] = {
-    settings = {
-      html = {
-        filetypes = { 'html', 'css' },
-      },
-    },
-  }
+  -- configs['tsserver'] = {
+  --   settings = {
+  --     tsserver = {
+  --       -- filetypes = { "sh", "zsh" };
+  --     },
+  --   },
+  -- }
+  -- configs['html'] = {
+  --   settings = {
+  --     html = {
+  --       filetypes = { 'html', 'css' },
+  --     },
+  --   },
+  -- }
   return configs
 end
 
@@ -219,6 +250,10 @@ require('mason-lspconfig').setup({
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+}
 capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities(capabilities))
 -- [Additional capabilities customization]
 -- Large workspace scanning may freeze the UI; see https://github.com/neovim/neovim/issues/23291
@@ -253,12 +288,6 @@ local diagnostic_icons = {
   INFO = '',
 }
 
--- Define the diagnostic signs.
-for severity, icon in pairs(diagnostic_icons) do
-  local hl = 'DiagnosticSign' .. severity:sub(1, 1) .. severity:sub(2):lower()
-  vim.fn.sign_define(hl, { text = icon, texthl = hl })
-end
-
 vim.diagnostic.config({
   virtual_text = false,
   float = {
@@ -272,7 +301,9 @@ vim.diagnostic.config({
     end,
   },
   -- Disable signs in the gutter.
-  signs = false,
+  signs = {
+    text = diagnostic_icons
+  }
 })
 
 -- https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua
@@ -352,6 +383,7 @@ local function enhanced_float_handler(handler)
     end
   end
 end
+
 
 local methods = vim.lsp.protocol.Methods
 if methods ~= nil and methods.textDocument_hover ~= nil then
