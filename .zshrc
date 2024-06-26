@@ -48,9 +48,9 @@ antigen apply
 
 # zstyle ':fzf-tab:complete:*' fzf-bindings 'tab:accept'
 
-if [ ! -f ${HOME}/.antigen/bundles/Aloxaf/fzf-tab/modules/Src/aloxaf/fzftab.so ]; then
-	build-fzf-tab-module
-fi
+# if [ ! -f ${HOME}/.antigen/bundles/Aloxaf/fzf-tab/modules/Src/aloxaf/fzftab.so ]; then
+# 	build-fzf-tab-module
+# fi
 
 
 DISABLE_AUTO_TITLE="true"
