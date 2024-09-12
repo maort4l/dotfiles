@@ -45,6 +45,11 @@ return {
       require('tokyonight').setup({
         style = 'night',
         transparent = false,
+        opts = {
+          plugins = {
+            auto = true,
+          }
+        }
       })
       vim.cmd('colorscheme tokyonight')
     end,
@@ -260,19 +265,19 @@ return {
   },
 
   -- ts query builder
-  {
-    'ziontee113/query-secretary',
-    keys = {
-      {
-        '<leader>z',
-        function()
-          require('query-secretary').query_window_initiate()
-        end,
-        noremap = true,
-        desc = 'query secretary',
-      },
-    },
-  },
+  -- {
+  --   'ziontee113/query-secretary',
+  --   keys = {
+  --     {
+  --       '<leader>z',
+  --       function()
+  --         require('query-secretary').query_window_initiate()
+  --       end,
+  --       noremap = true,
+  --       desc = 'query secretary',
+  --     },
+  --   },
+  -- },
   {
     'windwp/nvim-autopairs',
     config = function()
