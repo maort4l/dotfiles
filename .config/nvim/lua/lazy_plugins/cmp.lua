@@ -3,7 +3,7 @@ local function setup()
   local cmp = require('cmp')
   local compare = require('cmp.config.compare')
   local types = require('cmp.types')
-  local copilot = require('copilot_cmp').setup()
+  -- local copilot = require('copilot_cmp').setup()
 
   -- local tabnine = require('cmp_tabnine.config')
 
@@ -23,7 +23,8 @@ local function setup()
     nvim_lua = '[Lua]',
     -- cmp_tabnine = '[TN]',
     -- cmp_ai = '[AI]',
-    copilot = '[Copilot]',
+    -- copilot = '[Copilot]',
+    supermaven = '[SM]',
     path = '[Path]',
     calc = '[Calc]',
     treesitter = '[TS]',
@@ -32,7 +33,7 @@ local function setup()
 
 
   local comparators = {
-    require('copilot_cmp.comparators').prioritize,
+    -- require('copilot_cmp.comparators').prioritize,
     require('cmp_fuzzy_buffer.compare'),
     compare.offset,
     compare.exact,
@@ -112,7 +113,7 @@ local function setup()
       format = function(entry, vim_item)
         vim_item.kind = lspkind.symbolic(vim_item.kind, { mode = 'symbol' })
         vim_item.menu = source_mapping[entry.source.name]
-        if entry.source.name == 'copilot' then
+        if entry.source.name == 'supermaven' then
           local detail = (entry.completion_item.labelDetails or {}).detail
           vim_item.kind = ''
           if detail and detail:find('.*%%.*') then
@@ -156,7 +157,8 @@ local function setup()
           end,
         },
       },
-      {name = 'copilot' },
+      -- {name = 'copilot' },
+      {name = 'supermaven'},
       { name = 'nvim_lsp' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
@@ -237,14 +239,17 @@ local function setup()
 end
 
 
-vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+
+vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 return {
   {
 
     'hrsh7th/nvim-cmp',
     event = { "InsertEnter", "CmdlineEnter" },
     config = setup,
-    lazy = false,
+    lazy = true,
+    event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = {
       {
         'hrsh7th/cmp-nvim-lsp',
@@ -256,10 +261,10 @@ return {
       { 'hrsh7th/cmp-emoji' },
       { 'hrsh7th/cmp-nvim-lua' },
       { 'hrsh7th/cmp-cmdline' },
-      {
-        'zbirenbaum/copilot-cmp',
-        dependencies = 'zbirenbaum/copilot.lua',
-      },
+      -- {
+      --   'zbirenbaum/copilot-cmp',
+      --   dependencies = 'zbirenbaum/copilot.lua',
+      -- },
       { 'hrsh7th/cmp-nvim-lsp-signature-help' },
       { 'ray-x/cmp-treesitter' },
       {

@@ -34,6 +34,7 @@ return {
             end,
           },
           lualine_z = {
+            'searchcount',
             { 'location', separator = { right = '' }, left_padding = 2 },
           },
         },
