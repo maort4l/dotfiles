@@ -23,7 +23,8 @@ local function setup()
     nvim_lua = '[Lua]',
     -- cmp_tabnine = '[TN]',
     -- cmp_ai = '[AI]',
-    copilot = '[Copilot]',
+    supermaven = '[SuperMaven]',
+    -- copilot = '[Copilot]',
     path = '[Path]',
     calc = '[Calc]',
     treesitter = '[TS]',
@@ -32,7 +33,8 @@ local function setup()
 
 
   local comparators = {
-    require('copilot_cmp.comparators').prioritize,
+    -- require('copilot_cmp.comparators').prioritize,
+    -- require('cmp_ai.compare'),
     require('cmp_fuzzy_buffer.compare'),
     compare.offset,
     compare.exact,
@@ -87,7 +89,7 @@ local function setup()
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-        elseif vim.snippet.active({direction = 1}) then
+        elseif vim.snippet.active({ direction = 1 }) then
           vim.snippet.jump(1)
         else
           fallback()
@@ -96,7 +98,7 @@ local function setup()
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert }, { 'i', 'c' })
-        elseif vim.snippet.active({direction = -1}) then
+        elseif vim.snippet.active({ direction = -1 }) then
           vim.snippet.jump(-1)
         else
           fallback()
@@ -112,7 +114,7 @@ local function setup()
       format = function(entry, vim_item)
         vim_item.kind = lspkind.symbolic(vim_item.kind, { mode = 'symbol' })
         vim_item.menu = source_mapping[entry.source.name]
-        if entry.source.name == 'copilot' then
+        if entry.source.name == 'copilot' or entry.source.name == 'supermaven' then
           local detail = (entry.completion_item.labelDetails or {}).detail
           vim_item.kind = ''
           if detail and detail:find('.*%%.*') then
@@ -138,6 +140,8 @@ local function setup()
     },
     -- You should specify your *installed* sources.
     sources = cmp.config.sources({
+      -- { name = 'copilot', keyword_length = 0 },
+      { name = 'supermaven' ,keyword_length = 0 },
       {
         name = 'fuzzy_buffer',
         option = {
@@ -146,7 +150,7 @@ local function setup()
             local bufs = { vim.api.nvim_get_current_buf() }
             for _, buf in ipairs(vim.api.nvim_list_bufs()) do
               if vim.api.nvim_buf_is_loaded(buf) and buf ~= bufs[1] then
-                local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+                local buftype = vim.bo[buf].buftype
                 if buftype ~= 'nofile' and buftype ~= 'prompt' then
                   bufs[#bufs + 1] = buf
                 end
@@ -156,7 +160,6 @@ local function setup()
           end,
         },
       },
-      {name = 'copilot' },
       { name = 'nvim_lsp' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
@@ -171,9 +174,7 @@ local function setup()
     preselect = cmp.PreselectMode.None,
 
     experimental = {
-      ghost_text = {
-        hl_group = 'Comment',
-      },
+      ghost_text = true,
     },
 
     view = {
@@ -198,15 +199,29 @@ local function setup()
   })
 
   cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources(
+    view = {
+      entries = { name = 'custom', selection_order = 'near_cursor' },
+    },
+    sources = cmp.config.sources({
       {
-        { name = 'path' }
+        name = 'fuzzy_path',
+        option = {
+          fd_cmd = { 'fd', '-d', '20', '-p', '-i' },
+        },
       },
-      {
-        { name = 'cmdline' }
-      })
+    }, {
+      { name = 'cmdline' },
+    }),
   })
+
+  -- cmp.setup.cmdline(':', {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = cmp.config.sources({
+  --     { name = 'path' },
+  --   }, {
+  --     { name = 'cmdline' },
+  --   }),
+  -- })
 
   cmp.event:on('menu_opened', function(evt)
     if vim.api.nvim_get_mode().mode:sub(1, 1) == 'c' then
@@ -230,19 +245,16 @@ local function setup()
     })
   end)
   local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-  cmp.event:on(
-    'confirm_done',
-    cmp_autopairs.on_confirm_done()
-  )
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 end
 
-
-vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+vim.api.nvim_set_hl(0, 'CmpItemKindCopilot', { fg = '#6CC644' })
+vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 return {
   {
 
     'hrsh7th/nvim-cmp',
-    event = { "InsertEnter", "CmdlineEnter" },
+    event = { 'InsertEnter', 'CmdlineEnter' },
     config = setup,
     lazy = false,
     dependencies = {

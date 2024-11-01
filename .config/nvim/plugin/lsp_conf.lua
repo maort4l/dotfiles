@@ -174,7 +174,7 @@ local function setup_servers()
   -- configs['sqlls'] = {
   --   -- single_file_support = true,
   -- }
-  configs['gopls'] ={}
+  configs['gopls'] = {}
   -- configs['graphql'] = {}
   configs['lua_ls'] = {
     settings = {
@@ -204,8 +204,8 @@ local function setup_servers()
       jsonls = {
         filetypes = { 'json', 'jsonc' },
         init_options = {
-          provideFormatter = true
-        }
+          provideFormatter = true,
+        },
       },
     },
   }
@@ -251,8 +251,8 @@ require('mason-lspconfig').setup({
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
 }
 capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities(capabilities))
 -- [Additional capabilities customization]
@@ -302,8 +302,8 @@ vim.diagnostic.config({
   },
   -- Disable signs in the gutter.
   signs = {
-    text = diagnostic_icons
-  }
+    text = diagnostic_icons,
+  },
 })
 
 -- https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua

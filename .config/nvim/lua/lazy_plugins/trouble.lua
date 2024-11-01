@@ -1,7 +1,7 @@
-  return {
-    'folke/trouble.nvim',
-    branch = 'dev',
- keys = {
+return {
+  'folke/trouble.nvim',
+  cmd = "Trouble",
+  keys = {
     {
       "<leader>xx",
       "<cmd>Trouble diagnostics toggle<cr>",

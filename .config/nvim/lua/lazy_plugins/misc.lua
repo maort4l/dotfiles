@@ -1,13 +1,13 @@
 return {
   {
-    "echasnovski/mini.hipatterns",
+    'echasnovski/mini.hipatterns',
     -- event = "BufReadPre",
     config = function()
-      require("mini.hipatterns").setup({
+      require('mini.hipatterns').setup({
         highlighters = {
           -- Hex colours
-          hex_colour = require("mini.hipatterns").gen_highlighter.hex_color(),
-        }
+          hex_colour = require('mini.hipatterns').gen_highlighter.hex_color(),
+        },
       })
     end,
   },
@@ -19,19 +19,23 @@ return {
     },
   },
   {
-    "folke/flash.nvim",
-    event = "VeryLazy",
+    'folke/flash.nvim',
+    event = 'VeryLazy',
     opts = {
       modes = {
         search = {
-          enabled = false
-        }
-      }
+          enabled = false,
+        },
+      },
     },
     -- stylua: ignore
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
     },
+  },
+  {
+    'norcalli/nvim-terminal.lua',
+    opts = {},
   },
 
   -- zephyr-nvim dependencies nvim-treesitter
@@ -49,34 +53,6 @@ return {
       vim.cmd('colorscheme tokyonight')
     end,
   },
-  --
-  -- {
-  --   'rebelot/kanagawa.nvim',
-  --   enabled = false,
-  --   config = function()
-  --     require('kanagawa').setup({
-  --       undercurl = true, -- enable undercurls
-  --       colors = {
-  --         theme = {
-  --           all = {
-  --             ui = {
-  --               bg = 'black',
-  --               bg_gutter = 'none',
-  --               fg = 'wheat',
-  --             },
-  --             syn = {
-  --               identifier = 'wheat',
-  --             },
-  --           },
-  --         },
-  --       },
-  --     })
-  --     vim.cmd('colorscheme kanagawa')
-  --   end,
-  --   build = function()
-  --     require('kanagawa').compile()
-  --   end,
-  -- },
   -- jump to last place
   { 'farmergreg/vim-lastplace' },
   {
@@ -101,7 +77,7 @@ return {
     'tpope/vim-repeat',
     event = 'VeryLazy',
   },
-  { 'vim-scripts/dbext.vim', ft = 'sql',        enabled = false },
+  { 'vim-scripts/dbext.vim', ft = 'sql', enabled = false },
   {
     'wellle/targets.vim',
     event = 'VeryLazy',
@@ -112,7 +88,7 @@ return {
   },
   -- { "vim-scripts/TextTransform" },
 
-  { 'godlygeek/tabular',     cmd = 'Tabularize' },
+  { 'godlygeek/tabular', cmd = 'Tabularize' },
 
   -- add cmd utils as vim commands
   {
@@ -131,7 +107,7 @@ return {
       'Llocate',
       'SudoEdit',
       'SudoWrite',
-    }
+    },
   },
 
   -- show mappings
@@ -148,7 +124,7 @@ return {
     'tommcdo/vim-lion',
     keys = {
       { 'gl', nil, desc = 'align right on character', mode = { 'n', 'v' } },
-      { 'gL', nil, desc = 'align left on character',  mode = { 'n', 'v' } },
+      { 'gL', nil, desc = 'align left on character', mode = { 'n', 'v' } },
     },
   },
 

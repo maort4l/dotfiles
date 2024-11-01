@@ -160,18 +160,20 @@ return {
     event = 'VeryLazy',
     config = function()
       require('hlargs').setup({
-        disable = function(_, bufnr)
-          if vim.b.semantic_tokens then
-            return true
-          end
-          local clients = (vim.lsp.get_clients or vim.lsp.get_active_clients)({ bufnr = bufnr })
-          for _, c in pairs(clients) do
-            if c.name ~= 'null-ls' and c.supports_method('textDocument/semanticTokens/full') then
-              vim.b.semantic_tokens = true
-              return vim.b.semantic_tokens
-            end
-          end
-        end,
+        color="#FF7F7F",
+        -- color="#3AC6BE",
+        -- disable = function(_, bufnr)
+        --   if vim.b.semantic_tokens then
+        --     return true
+        --   end
+        --   local clients = (vim.lsp.get_clients)({ bufnr = bufnr })
+        --   for _, c in pairs(clients) do
+        --     if c.name ~= 'null-ls' and c.supports_method('textDocument/semanticTokens/full') then
+        --       vim.b.semantic_tokens = true
+        --       return vim.b.semantic_tokens
+        --     end
+        --   end
+        -- end,
       })
     end,
   },

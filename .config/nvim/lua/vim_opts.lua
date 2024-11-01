@@ -1,5 +1,6 @@
 vim.loader.enable()
 
+vim.highlight.priorities.semantic_tokens = 95
 vim.g.mapleader = ','
 
 if vim.fn.has('termguicolors') then
@@ -24,12 +25,12 @@ vim.o.foldlevelstart = 99
 vim.o.foldcolumn = '1'
 
 vim.opt.fillchars = {
-  fold = " ",
-  foldopen = "",
-  foldclose = "",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
+  fold = ' ',
+  foldopen = '',
+  foldclose = '',
+  foldsep = ' ',
+  diff = '╱',
+  eob = ' ',
 }
 vim.opt.foldminlines = 10
 
@@ -50,7 +51,7 @@ vim.opt.textwidth = 80                 -- set text width to 80 chars.
 vim.opt.tabpagemax = 30                --how many tabs to allow at max
 vim.opt.hlsearch = true
 -- vim.opt.viminfo = '50,"100,:50,%,n~/.viminfo'
-vim.opt.laststatus = 2
+vim.opt.laststatus = 3
 vim.opt.encoding = 'utf-8'
 vim.opt.so = 5 --cursor cant get closer than 5 lines to end of screen
 vim.opt.spell = true
@@ -82,6 +83,8 @@ vim.opt.diffopt = vim.opt.diffopt + 'linematch:60'
 
 vim.opt.shada = [[!,'100,<50,s10,h,%]]
 
+vim.opt.splitright = true
+
 --spelling highlight
 vim.api.nvim_set_hl(0, 'SpellBad', {
   reverse = true,
@@ -108,7 +111,6 @@ vim.api.nvim_set_hl(0, 'SpellLocal', {
   bg = '#7f0000',
   underline = true,
 })
-
 
 --folding highlight
 vim.api.nvim_set_hl(0, 'Folded', {
@@ -148,7 +150,6 @@ augroup replacegJ
 augroup end
 ]])
 
-
 vim.api.nvim_create_user_command('TSReload', function()
   vim.cmd([[
       write
@@ -184,3 +185,26 @@ vim.api.nvim_set_hl(0, 'Normal', {
   fg = 'wheat',
   bg = 'black',
 })
+
+-- vim.g.claude_api_key = os.getenv('ANTHROPIC_API_KEY')
+
+
+vim.api.nvim_create_autocmd('VimEnter', {
+	callback = function()
+		if vim.env.TMUX_PLUGIN_MANAGER_PATH then
+			vim.uv.spawn(vim.env.TMUX_PLUGIN_MANAGER_PATH .. '/tmux-window-name/scripts/rename_session_windows.py', {})
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        local current_file = vim.fn.expand("%:t")
+        local current_directory = vim.fn.getcwd()
+        local home_directory = vim.fn.expand("~")
+        local display_directory = current_directory:gsub(home_directory, "~")
+        vim.opt.titlestring = current_file .. '-' .. display_directory
+    end
+})
+
+vim.opt.title = true

@@ -40,6 +40,7 @@ function M.on_attach(client, bufnr)
   local opts = { noremap = true, silent = true }
   buf_set_keymap('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gv', '<Cmd>vsplit | lua vim.lsp.buf.definition() <CR>', opts)
   buf_set_keymap('n', 'gr', '<Cmd>FzfLua lsp_references<CR>', opts)
   buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -80,6 +81,7 @@ function M.on_attach(client, bufnr)
   end
   if client.supports_method('textDocument/inlayHintProvider') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    vim.api.nvim_set_hl(0, 'LspInlayHint', { fg = '#7c8fa1' })
   end
   --   vim.lsp.buf.inlay_hint(bufnr, true)
   -- setup codelens

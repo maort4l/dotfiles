@@ -16,12 +16,12 @@ return {
   keys = {
     {
       -- Customize or remove this keymap to your liking
-      "<leader>f",
+      '<leader>f',
       function()
-        require("conform").format({ async = true, lsp_fallback = true })
+        require('conform').format({ async = true, lsp_fallback = true })
       end,
-      mode = "",
-      desc = "Format buffer",
+      mode = '',
+      desc = 'Format buffer',
     },
   },
   opts = {
@@ -32,11 +32,14 @@ return {
     },
     formatters_by_ft = {
       json = { 'fixjson' },
+      jsonl = { 'jq' },
       python = { 'ruff_format', 'ruff_fix' },
+      -- python = { 'black', 'isort'},
       bash = { 'beautysh' },
       yaml = { 'yamlfmt' },
-      sql = { 'sqlfluff' },
-      lua = { "stylua" },
+      sql = { 'sqlfmt' },
+      lua = { 'stylua' },
+      toml = { 'taplo' },
     },
 
   },

@@ -3,14 +3,35 @@ return {
   cmd = 'FzfLua',
   keys = {
     { '<leader>fd', '<cmd>FzfLua lsp_document_diagnostics<cr>', desc = 'Document diagnostics' },
-    { '<leader>pp', '<cmd>FzfLua files<cr>',                    desc = 'Find files' },
-    { '<leader>fg', '<cmd>FzfLua live_grep_glob<cr>',           desc = 'Grep' },
-    { '<leader>fh', '<cmd>FzfLua help_tags<cr>',                desc = 'Help' },
-    -- { '<leader>gs', '<cmd>FzfLua git_status<cr>',               desc = 'Git Status' },
+    { '<leader>pb', '<cmd>FzfLua buffers<cr>', desc = 'Open Buffers' },
+    { '<leader>pp', '<cmd>FzfLua files<cr>', desc = 'Find files' },
+    { '<leader>fg', '<cmd>FzfLua live_grep_glob<cr>', desc = 'Grep' },
+    { '<leader>fm', '<cmd>FzfLua marks<cr>', desc = 'Find Marks' },
+    { '<leader>fh', '<cmd>FzfLua help_tags<cr>', desc = 'Help' },
+    { '<leader>pw', '<cmd>lua require("fzf-lua").files({cwd="~/work"})<cr>', desc = 'Search file in work' },
+    { '<leader>ps', '<cmd>lua require("fzf-lua").live_grep_glob({cwd="~/work"})<cr>', desc = 'grep in work' },
+    { '<leader>gs', '<cmd>FzfLua git_status<cr>', desc = 'Show Git Status' },
+    { '<leader>gc', '<cmd>FzfLua git_commits<cr>', desc = 'Search Git Commits' },
+    { '<leader>gb', '<cmd>FzfLua git_branches<cr>', desc = 'Search Git Branches' },
+    { '<leader>pt', '<cmd>lua require("fzf-lua").grep({search="#*TODO|HACK|PERF|NOTE|FIX", no_esc=true})<cr>', desc = 'Search TODO COMMENTS' },
+    {
+      '<leader>/k',
+      function()
+        require('fzf-lua').keymaps()
+      end,
+      desc = 'search keymaps',
+    },
+    { '<leader>fl', '<cmd> FzfLua lsp_live_workspace_symbols<cr>', desc = 'Search LSP Symbols' },
   },
   config = function()
-    local actions = require "fzf-lua.actions"
-    require("fzf-lua").setup({
+    local actions = require('fzf-lua.actions')
+    require('fzf-lua').setup({
+      grep = {
+        rg_opts = '--column --line-number --no-heading --color=always --smart-case --hidden',
+      },
+      lsp = {
+        includeDeclaration = false,
+      },
       fzf_colors = {
         bg = { 'bg', 'Normal' },
         gutter = { 'bg', 'Normal' },
@@ -27,26 +48,30 @@ return {
           ['<C-i>'] = 'toggle-preview',
         },
       },
+      grep = {
+        rg_opts = "--hidden --line-number --no-heading --color=always --smart-case --max-columns=4096 -e",
+      },
       files = {
         winopts = {
           height = 0.7,
-          width = 0.55,
+          width = 0.6,
+          row = 0.5,
           preview = { hidden = 'hidden' },
         },
         cwd_prompt = false,
-        prompt = "Files> ",
-        fd_opts = "--type file --exclude .git",
+        prompt = 'Files> ',
+        fd_opts = '--type file --hidden --exclude .git',
         fzf_opts = {
-          ["--layout"] = "reverse",
-          ["--scheme"] = "path",
-          ["--tiebreak"] = "end",
-          ["--ansi"] = "",
+          ['--layout'] = 'reverse',
+          ['--scheme'] = 'path',
+          ['--tiebreak'] = 'end',
+          ['--ansi'] = '',
         },
         actions = {
-          ["j"] = actions.move_selection_next,
-          ["k"] = actions.move_selection_previous,
-          ["ctrl-g"] = false
-        }
+          ['j'] = actions.move_selection_next,
+          ['k'] = actions.move_selection_previous,
+          ['ctrl-g'] = false,
+        },
       },
       git = {
         status = {
