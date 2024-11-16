@@ -33,7 +33,7 @@ return {
     formatters_by_ft = {
       json = { 'fixjson' },
       jsonl = { 'jq' },
-      python = { 'ruff_format', 'ruff_fix' },
+      python = { 'ruff_format', 'ruff_fix', 'ruff_organize_imports' },
       -- python = { 'black', 'isort'},
       bash = { 'beautysh' },
       yaml = { 'yamlfmt' },

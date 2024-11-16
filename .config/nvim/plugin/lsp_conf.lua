@@ -79,11 +79,26 @@ local function setup_servers()
   --     },
   --   },
   -- }
+  configs['ruff'] = {
+    init_options = {
+      settings = {
+        lint = {
+          enable = true,
+          select = { 'I', 'PL'},
+        },
+        format = {
+          enabled = true
+        }
+      }
+    }
+  }
+
   configs['basedpyright'] = {
     settings = {
       basedpyright = {
+        disableOrganizeImports = true,
         analysis = {
-          typeCheckingMode = 'off',
+          typeCheckingMode = 'recommended',
           diagnosticSeverityOverrides = {
             strictDictionaryInference     = 'warning',
             reportMissingImports          = 'error',
